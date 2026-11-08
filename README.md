@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Admin Frontend
 
 React + Vite starter for the Employee Leave Management System Admin Service.
@@ -31,3 +32,7 @@ This frontend uses the Admin Service endpoints already discussed:
 
 The exact login response is handled flexibly (`token`, `accessToken`, or `jwt`). If your backend returns a different field, adjust `src/services/authService.js`.
 Employee/manager/leave response fields are rendered defensively. This starter focuses on viewing data and report download; it does not invent create/update/delete request bodies or Leave Service integration.
+=======
+# employee-leave-management-frontend
+Frontend application for Employee Leave Management System
+>>>>>>> origin/admin-frontend
