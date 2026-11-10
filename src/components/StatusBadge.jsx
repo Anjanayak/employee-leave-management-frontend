@@ -1,0 +1,1 @@
+export default function StatusBadge({status}){const s=(status||"PENDING").toUpperCase();const cls=s==="APPROVED"?"success":s==="REJECTED"?"danger":s==="PENDING"?"warning":"secondary";return <span className={`status-badge ${cls}`}>{s.replaceAll("_"," ")}</span>}

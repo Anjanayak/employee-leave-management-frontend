@@ -1,0 +1,15 @@
+import { Link } from "react-router-dom";
+import { useManager } from "../context/ManagerContext";
+import StatCard from "../components/StatCard";
+import StatusBadge from "../components/StatusBadge";
+import EmptyState from "../components/EmptyState";
+export default function Dashboard(){
+ const {pending,history,loading,error,refresh}=useManager();
+ const approved=history.filter(x=>(x.decision||x.decisionType)==="APPROVED").length,rejected=history.filter(x=>(x.decision||x.decisionType)==="REJECTED").length;
+ return <><div className="welcome-row"><div><h2>Good to see you.</h2><p>Here’s what’s happening with your team’s leave requests.</p></div><button className="btn btn-outline-primary" onClick={refresh}><i className="bi bi-arrow-clockwise me-2"/>Refresh</button></div>
+ {error&&<div className="alert alert-warning d-flex justify-content-between align-items-center"><span><i className="bi bi-exclamation-triangle me-2"/>{error}</span><button className="btn btn-sm btn-outline-dark" onClick={refresh}>Retry</button></div>}
+ <div className="stats-grid"><StatCard label="Pending requests" value={pending.length} icon="bi-hourglass-split" tone="blue" caption="Awaiting your review"/><StatCard label="Approved" value={approved} icon="bi-check2-circle" tone="green" caption="Decisions recorded"/><StatCard label="Rejected" value={rejected} icon="bi-x-circle" tone="red" caption="Decisions recorded"/><StatCard label="Total decisions" value={history.length} icon="bi-clipboard-check" tone="purple" caption="Your decision history"/></div>
+ <section className="content-card"><div className="section-heading"><div><h3>Requests awaiting review</h3><p>Start with the most recent submissions.</p></div><Link className="btn btn-sm btn-light" to="/pending-leaves">View all <i className="bi bi-arrow-right ms-1"/></Link></div>
+ {loading?<div className="loading-line">Loading requests...</div>:pending.length===0?<EmptyState icon="bi-check2-all" title="You're all caught up" text="There are no pending leave requests right now."/>:<div className="table-responsive"><table className="table align-middle app-table"><thead><tr><th>EMPLOYEE</th><th>LEAVE TYPE</th><th>DATES</th><th>STATUS</th><th/></tr></thead><tbody>{pending.slice(0,5).map(x=><tr key={x.leaveRequestId}><td><div className="employee-cell"><span className="avatar soft">{(x.employeeName||"U").slice(0,1)}</span><div><strong>{x.employeeName}</strong><small>Employee ID: {x.employeeId}</small></div></div></td><td>{x.leaveType}</td><td>{x.startDate} – {x.endDate}</td><td><StatusBadge status={x.status}/></td><td><Link className="table-action" to={`/leaves/${x.leaveRequestId}`}>Review <i className="bi bi-arrow-up-right"/></Link></td></tr>)}</tbody></table></div>}</section>
+ <section className="quick-tip"><div className="tip-icon"><i className="bi bi-lightbulb"/></div><div><strong>Thoughtful decisions build trust</strong><p>When rejecting a request, include a clear reason so employees understand the decision.</p></div></section></>;
+}
